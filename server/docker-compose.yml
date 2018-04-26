@@ -1,0 +1,36 @@
+version: "3"
+
+networks:
+  napoleon:
+    external: true
+
+services:
+  u-grpc-server-golang:
+    container_name: u-grpc-server-golang
+    image: u-grpc-server-golang
+    build:
+      context: .
+      dockerfile: .docker/golang/Dockerfile.dev
+    volumes:
+      - .:/go/src/github.com/Sharykhin/go-users-grpc-server
+    ports:
+      - 50051:50051
+    links:
+      - u-grpc-server-mongo
+    depends_on:
+      - u-grpc-server-mongo
+    networks:
+      - napoleon
+
+  u-grpc-server-mongo:
+    container_name: u-grpc-server-mongo
+    image: u-grpc-server-mongo
+    ports:
+      - 27017:27017
+    build:
+      context: .
+      dockerfile: .docker/mongodb/Dockerfile.dev
+    volumes:
+      - ./.docker-runtime/mongodb:/data/db
+    networks:
+      - napoleon
