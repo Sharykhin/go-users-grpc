@@ -1,7 +1,11 @@
 package main
 
-import "fmt"
+import (
+	"log"
+
+	"github.com/Sharykhin/go-users-grpc/server/handler"
+)
 
 func main() {
-	fmt.Println("Hello World")
+	log.Fatal(handler.ListenAndServe())
 }

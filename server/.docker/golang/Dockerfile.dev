@@ -1,8 +1,8 @@
 FROM golang:1.9
 
-ADD . /go/src/github.com/Sharykhin/go-users-grpc-server
+ADD . /go/src/github.com/Sharykhin/go-users-grpc/server
 
-WORKDIR /go/src/github.com/Sharykhin/go-users-grpc-server
+WORKDIR /go/src/github.com/Sharykhin/go-users-grpc/server
 
 RUN curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
 

@@ -3,6 +3,7 @@ package user;
 
 service User {
     rpc CreateUser(CreateUserRequest) returns (UserResponse) {}
+    rpc Users(UserFilter) returns (UserListReponse) {}
 }
 
 message CreateUserRequest {
@@ -15,4 +16,13 @@ message UserResponse {
     string name = 2;
     string email = 3;
     string created_at = 4;
+}
+
+message UserListReponse {
+    repeated UserResponse users = 1;
+}
+
+message UserFilter {
+    int64 limit = 1;
+    int64 offset = 2;
 }

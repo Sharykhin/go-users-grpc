@@ -12,7 +12,9 @@ services:
       context: .
       dockerfile: .docker/golang/Dockerfile.dev
     volumes:
-      - .:/go/src/github.com/Sharykhin/go-users-grpc-server
+      - .:/go/src/github.com/Sharykhin/go-users-grpc/server
+    env_file:
+      - ./.docker/golang/.env
     ports:
       - 50051:50051
     links:

@@ -1,3 +1,4 @@
 vendor
 .docker-runtime/*
 !.docker-runtime/.gitkeep
+.env

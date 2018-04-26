@@ -19,3 +19,7 @@ func (s Server) CreateUser(context.Context, *pb.CreateUserRequest) (*pb.UserResp
 		CreatedAt: time.Now().UTC().String(),
 	}, nil
 }
+
+//func (s Server) Users(context.Context, *pb.UserFilter) (*pb.UserListReponse, error) {
+//	return &pb.UserLi
+//}
