@@ -19,11 +19,11 @@ func ListenAndServe() error {
 		log.Fatalf("failed to listen: %v", err)
 	}
 	// create a server instance
-	s := api.Server{}
+	s := api.NewServer(true)
 	// create a gRPC server object
 	grpcServer := grpc.NewServer()
 	// attach the service to the grpc one
-	pb.RegisterUserServer(grpcServer, &s)
+	pb.RegisterUserServer(grpcServer, s)
 	// start the server
 	fmt.Printf("Started listening on %s\n", address)
 	return grpcServer.Serve(lis)
