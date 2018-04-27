@@ -3,27 +3,31 @@ package api
 import (
 	"context"
 
-	"time"
+	"fmt"
 
 	pb "github.com/Sharykhin/go-users-grpc/proto"
+	"github.com/Sharykhin/go-users-grpc/server/entity"
 	"github.com/Sharykhin/go-users-grpc/server/mongodb"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type server struct {
-	storage UserService
+	storage entity.UserService
 	debug   bool
 }
 
-type UserService interface {
-	CreateUser(ctx context.Context, in *pb.CreateUserRequest) (*pb.UserResponse, error)
-}
+func (s server) CreateUser(ctx context.Context, in *pb.CreateUserRequest) (*pb.UserResponse, error) {
+	fmt.Printf("GRPC CreateUser is called with: %v\n", in)
+	u, err := s.storage.CreateUser(ctx, in)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "could not create a new user: %v", err)
+	}
 
-func (s server) CreateUser(context.Context, *pb.CreateUserRequest) (*pb.UserResponse, error) {
 	return &pb.UserResponse{
-		ID:        "123",
-		Name:      "John",
-		Email:     "chapal@inbox.ru",
-		CreatedAt: time.Now().UTC().String(),
+		ID:    u.ID.Hex(),
+		Name:  u.Name,
+		Email: u.Email,
 	}, nil
 }
 

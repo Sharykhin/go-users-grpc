@@ -20,7 +20,7 @@ func main() {
 		Email: "chapal@inbox.ru",
 	})
 	if err != nil {
-		log.Fatalf("Error when calling SayHello: %s", err)
+		log.Fatalf("Error when calling CreateUser: %v", err)
 	}
 	log.Printf("Response from server: %s", response)
 }

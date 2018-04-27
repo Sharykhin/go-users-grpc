@@ -8,7 +8,9 @@ import (
 	"fmt"
 
 	pb "github.com/Sharykhin/go-users-grpc/proto"
+	"github.com/Sharykhin/go-users-grpc/server/entity"
 	"gopkg.in/mgo.v2"
+	"gopkg.in/mgo.v2/bson"
 )
 
 type userService struct {
@@ -20,13 +22,19 @@ type userService struct {
 // for managing users through mongodb database
 var UserService userService
 
-func (s userService) CreateUser(ctx context.Context, in *pb.CreateUserRequest) (*pb.UserResponse, error) {
-	err := s.db.C(s.collection).Insert(in)
+func (s userService) CreateUser(ctx context.Context, in *pb.CreateUserRequest) (*entity.User, error) {
+	user := entity.User{
+		ID:    bson.NewObjectId(),
+		Name:  in.Name,
+		Email: in.Email,
+	}
+	err := s.db.C(s.collection).Insert(user)
+
 	if err != nil {
 		return nil, fmt.Errorf("could not save a new user")
 	}
 
-	return nil, nil
+	return &user, nil
 }
 
 func init() {
