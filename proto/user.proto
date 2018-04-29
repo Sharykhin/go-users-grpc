@@ -9,13 +9,15 @@ service User {
 message CreateUserRequest {
     string name = 1;
     string email = 2 ;
+    bool activated = 3;
 }
 
 message UserResponse {
     string ID = 1;
     string name = 2;
     string email = 3;
-    string created_at = 4;
+    bool activated = 4;
+    string created_at = 5;
 }
 
 message UserListReponse {

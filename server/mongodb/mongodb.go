@@ -7,6 +7,8 @@ import (
 
 	"fmt"
 
+	"time"
+
 	pb "github.com/Sharykhin/go-users-grpc/proto"
 	"github.com/Sharykhin/go-users-grpc/server/entity"
 	"gopkg.in/mgo.v2"
@@ -24,9 +26,11 @@ var UserService userService
 
 func (s userService) CreateUser(ctx context.Context, in *pb.CreateUserRequest) (*entity.User, error) {
 	user := entity.User{
-		ID:    bson.NewObjectId(),
-		Name:  in.Name,
-		Email: in.Email,
+		ID:        bson.NewObjectId(),
+		Name:      in.Name,
+		Email:     in.Email,
+		CreatedAt: time.Now().UTC(),
+		Activated: false,
 	}
 	err := s.db.C(s.collection).Insert(user)
 
