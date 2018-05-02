@@ -24,9 +24,47 @@ type userService struct {
 // for managing users through mongodb database
 var UserService userService
 
-func (s userService) List(ctx context.Context, limit, offset int64) ([]entity.User, error) {
+func init() {
+	address := os.Getenv("MONGODB_ADDRESS")
+	var err error
+	session, err := mgo.Dial(address)
+	if err != nil {
+		log.Fatalf("could not lister mongodb on %s: %v", address, err)
+	}
+
+	if err = session.Ping(); err != nil {
+		log.Fatalf("could not ping mongodb: %v", err)
+	}
+
+	db := session.DB(os.Getenv("MONGODB_DBNAME"))
+	UserService = userService{
+		collection: "users",
+		db:         db,
+	}
+
+	//defer db.Close()
+}
+
+func applyCriteria(in []*pb.QueryCriteria) map[string]interface{} {
+	criteria := bson.M{}
+	for _, c := range in {
+		switch c.Key {
+		case "deleted_at":
+			if c.Value == "false" {
+				criteria[c.Key] = nil
+			}
+			if c.Value == "true" {
+				criteria[c.Key] = bson.M{"$ne": nil}
+			}
+		}
+	}
+	return criteria
+}
+
+func (s userService) List(ctx context.Context, in *pb.UserFilter) ([]entity.User, error) {
 	var users []entity.User
-	err := s.db.C(s.collection).Find(bson.M{}).Skip(int(offset)).Limit(int(limit)).All(&users)
+	criteria := applyCriteria(in.Criteria)
+	err := s.db.C(s.collection).Find(criteria).Skip(int(in.Offset)).Limit(int(in.Limit)).All(&users)
 	if err != nil {
 		log.Printf("MongoDB: got error on users list: %v\n", err)
 		return nil, err
@@ -67,25 +105,4 @@ func (s userService) Remove(ctx context.Context, ID string) error {
 
 func (s userService) HardRemove(ctx context.Context, ID string) error {
 	return s.db.C(s.collection).RemoveId(bson.ObjectIdHex(ID))
-}
-
-func init() {
-	address := os.Getenv("MONGODB_ADDRESS")
-	var err error
-	session, err := mgo.Dial(address)
-	if err != nil {
-		log.Fatalf("could not lister mongodb on %s: %v", address, err)
-	}
-
-	if err = session.Ping(); err != nil {
-		log.Fatalf("could not ping mongodb: %v", err)
-	}
-
-	db := session.DB(os.Getenv("MONGODB_DBNAME"))
-	UserService = userService{
-		collection: "users",
-		db:         db,
-	}
-
-	//defer db.Close()
 }

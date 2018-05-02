@@ -25,7 +25,7 @@ func (s server) List(ctx context.Context, in *pb.UserFilter) (*pb.UserListRepons
 		log.Printf("GRPC: Method <List> is called with: %v\n", in)
 	}
 	fmt.Printf("GRPC List is called with: %v\n", in)
-	users, err := s.storage.List(ctx, in.Limit, in.Offset)
+	users, err := s.storage.List(ctx, in)
 	if err != nil {
 		file.Logger.Errorf("could not get users list: %v", err)
 		return nil, status.Errorf(codes.Internal, "could not get list of users: %v", err)

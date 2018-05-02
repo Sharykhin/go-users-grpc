@@ -22,6 +22,7 @@ func main() {
 
 	action := flag.String("action", "", "a string")
 	id := flag.String("id", "", "an id")
+	deleted := flag.String("deleted", "", "adsas")
 	flag.Parse()
 
 	switch *action {
@@ -51,10 +52,29 @@ func main() {
 		}
 		log.Printf("Response from server: %v", response)
 	case "list":
-		response, err := c.List(context.Background(), &pb.UserFilter{
+
+		filter := &pb.UserFilter{
 			Limit:  3,
 			Offset: 0,
-		})
+		}
+		fmt.Println(*deleted)
+		if *deleted == "true" {
+			filter.Criteria = []*pb.QueryCriteria{
+				{
+					Key:   "deleted_at",
+					Value: "true",
+				},
+			}
+		} else if *deleted == "false" {
+			filter.Criteria = []*pb.QueryCriteria{
+				{
+					Key:   "deleted_at",
+					Value: "false",
+				},
+			}
+		}
+
+		response, err := c.List(context.Background(), filter)
 		if err != nil {
 			log.Fatalf("Error when calling Update: %v", err)
 		}
