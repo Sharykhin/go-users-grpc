@@ -3,14 +3,13 @@ package api
 import (
 	"context"
 
-	"fmt"
-
 	"log"
 
 	pb "github.com/Sharykhin/go-users-grpc/proto"
 	"github.com/Sharykhin/go-users-grpc/server/entity"
 	"github.com/Sharykhin/go-users-grpc/server/logger/file"
 	"github.com/Sharykhin/go-users-grpc/server/mongodb"
+	"github.com/Sharykhin/go-users-grpc/server/validate"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -24,7 +23,7 @@ func (s server) List(ctx context.Context, in *pb.UserFilter) (*pb.UserListRepons
 	if s.debug {
 		log.Printf("GRPC: Method <List> is called with: %v\n", in)
 	}
-	fmt.Printf("GRPC List is called with: %v\n", in)
+
 	users, err := s.storage.List(ctx, in)
 	if err != nil {
 		file.Logger.Errorf("could not get users list: %v", err)
@@ -48,6 +47,9 @@ func (s server) List(ctx context.Context, in *pb.UserFilter) (*pb.UserListRepons
 func (s server) Create(ctx context.Context, in *pb.CreateUserRequest) (*pb.UserResponse, error) {
 	if s.debug {
 		log.Printf("GRPC: Method <Create> is called with: %v\n", in)
+	}
+	if err := validate.UserRequest(in); err != nil {
+		return nil, status.Errorf(codes.InvalidArgument, "failed validation: %v", err)
 	}
 	u, err := s.storage.Create(ctx, in)
 	if err != nil {
