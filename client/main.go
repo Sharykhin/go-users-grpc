@@ -53,7 +53,7 @@ func main() {
 	case "list":
 		response, err := c.List(context.Background(), &pb.UserFilter{
 			Limit:  3,
-			Offset: 1,
+			Offset: 0,
 		})
 		if err != nil {
 			log.Fatalf("Error when calling Update: %v", err)

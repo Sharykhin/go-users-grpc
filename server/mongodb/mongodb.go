@@ -28,6 +28,7 @@ func (s userService) List(ctx context.Context, limit, offset int64) ([]entity.Us
 	var users []entity.User
 	err := s.db.C(s.collection).Find(bson.M{}).Skip(int(offset)).Limit(int(limit)).All(&users)
 	if err != nil {
+		log.Printf("MongoDB: got error on users list: %v\n", err)
 		return nil, err
 	}
 
@@ -35,17 +36,21 @@ func (s userService) List(ctx context.Context, limit, offset int64) ([]entity.Us
 }
 
 func (s userService) Create(ctx context.Context, in *pb.CreateUserRequest) (*entity.User, error) {
+
 	user := entity.User{
 		ID:        bson.NewObjectId(),
 		Name:      in.Name,
 		Email:     in.Email,
 		Activated: in.Activated,
 		CreatedAt: time.Now().UTC(),
+		DeletedAt: entity.NullTime{},
 	}
-	fmt.Printf("Mongodb store entity: %v\n", user)
+
+	fmt.Printf("MongoDB: Create user: %v\n", user)
 	err := s.db.C(s.collection).Insert(user)
 
 	if err != nil {
+		log.Printf("MongoDB: error: %v\n", err)
 		return nil, fmt.Errorf("could not save a new user")
 	}
 
@@ -57,6 +62,10 @@ func (s userService) Update(ctx context.Context, ID string, in *pb.UpdateUserReq
 }
 
 func (s userService) Remove(ctx context.Context, ID string) error {
+	return s.db.C(s.collection).Update(bson.M{"_id": bson.ObjectIdHex(ID)}, bson.M{"$set": bson.M{"deleted_at": time.Now().UTC()}})
+}
+
+func (s userService) HardRemove(ctx context.Context, ID string) error {
 	return s.db.C(s.collection).RemoveId(bson.ObjectIdHex(ID))
 }
 

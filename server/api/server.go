@@ -18,7 +18,7 @@ type server struct {
 }
 
 func (s server) List(ctx context.Context, in *pb.UserFilter) (*pb.UserListReponse, error) {
-	fmt.Printf("GRPC Users is called with: %v\n", in)
+	fmt.Printf("GRPC List is called with: %v\n", in)
 	users, err := s.storage.List(ctx, in.Limit, in.Offset)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "could not get list of users: %v", err)
@@ -31,7 +31,8 @@ func (s server) List(ctx context.Context, in *pb.UserFilter) (*pb.UserListRepons
 			Name:      u.Name,
 			Email:     u.Email,
 			Activated: u.Activated,
-			CreatedAt: u.CreatedAt.Format("2006-01-02 15:04:05"),
+			CreatedAt: u.CreatedAt.UTC().Format(entity.TimeFormat),
+			DeletedAt: u.DeletedAt.String(),
 		})
 	}
 	return response, nil
@@ -49,7 +50,8 @@ func (s server) Create(ctx context.Context, in *pb.CreateUserRequest) (*pb.UserR
 		Name:      u.Name,
 		Email:     u.Email,
 		Activated: u.Activated,
-		CreatedAt: u.CreatedAt.Format("2006-01-02 15:04:05"),
+		CreatedAt: u.CreatedAt.UTC().Format(entity.TimeFormat),
+		DeletedAt: u.DeletedAt.String(),
 	}, nil
 }
 
