@@ -11,10 +11,20 @@ const (
 	nameMaxLength = 10
 )
 
-// UserRequest validates income requeqst for creating a new user
-func UserRequest(in *pb.CreateUserRequest) error {
+// UserCreateRequest validates income request for creating a new user
+func UserCreateRequest(in *pb.CreateUserRequest) error {
 	if err := validateName(in.Name); err != nil {
 		return err
+	}
+	return nil
+}
+
+// UserUpdateRequest validates income request on updating user's data
+func UserUpdateRequest(in *pb.UpdateUserRequest) error {
+	if in.GetNameNull() == false {
+		if err := validateName(in.GetNameValue()); err != nil {
+			return err
+		}
 	}
 	return nil
 }

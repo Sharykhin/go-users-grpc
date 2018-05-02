@@ -1,12 +1,10 @@
 package mongodb
 
-import "context"
 import (
+	"context"
+	"fmt"
 	"log"
 	"os"
-
-	"fmt"
-
 	"time"
 
 	pb "github.com/Sharykhin/go-users-grpc/proto"
@@ -45,7 +43,7 @@ func init() {
 	//defer db.Close()
 }
 
-func applyCriteria(in []*pb.QueryCriteria) map[string]interface{} {
+func applyCriteria(in []*pb.QueryCriteria) (map[string]interface{}, error) {
 	criteria := bson.M{}
 	for _, c := range in {
 		switch c.Key {
@@ -56,15 +54,20 @@ func applyCriteria(in []*pb.QueryCriteria) map[string]interface{} {
 			if c.Value == "true" {
 				criteria[c.Key] = bson.M{"$ne": nil}
 			}
+		default:
+			return nil, fmt.Errorf("unexpected criteria %s", c.Key)
 		}
 	}
-	return criteria
+	return criteria, nil
 }
 
 func (s userService) List(ctx context.Context, in *pb.UserFilter) ([]entity.User, error) {
 	var users []entity.User
-	criteria := applyCriteria(in.Criteria)
-	err := s.db.C(s.collection).Find(criteria).Skip(int(in.Offset)).Limit(int(in.Limit)).All(&users)
+	criteria, err := applyCriteria(in.Criteria)
+	if err != nil {
+		return nil, err
+	}
+	err = s.db.C(s.collection).Find(criteria).Skip(int(in.Offset)).Limit(int(in.Limit)).All(&users)
 	if err != nil {
 		log.Printf("MongoDB: got error on users list: %v\n", err)
 		return nil, err

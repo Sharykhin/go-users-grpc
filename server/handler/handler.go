@@ -1,11 +1,10 @@
 package handler
 
 import (
+	"fmt"
 	"log"
 	"net"
 	"os"
-
-	"fmt"
 
 	pb "github.com/Sharykhin/go-users-grpc/proto"
 	"github.com/Sharykhin/go-users-grpc/server/api"
@@ -20,11 +19,11 @@ func ListenAndServe() error {
 		log.Fatalf("failed to listen: %v", err)
 	}
 	// create a server instance
-	s := api.NewServer(env == "dev")
+	us := api.NewUserServer(env == "dev")
 	// create a gRPC server object
 	grpcServer := grpc.NewServer()
 	// attach the service to the grpc one
-	pb.RegisterUserServer(grpcServer, s)
+	pb.RegisterUserServer(grpcServer, us)
 	// start the server
 	fmt.Printf("Started listening on %s\n", address)
 	return grpcServer.Serve(lis)
