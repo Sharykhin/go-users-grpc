@@ -39,6 +39,15 @@ func (s server) Users(context.Context, *pb.UserFilter) (*pb.UserListReponse, err
 	}, nil
 }
 
+func (s server) Remove(ctx context.Context, in *pb.UserID) (*pb.Empty, error) {
+	fmt.Printf("GRPC Remove is called with: %v\n", in)
+	err := s.storage.Remove(ctx, in.ID)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "could not remove user: %v", err)
+	}
+	return &pb.Empty{}, nil
+}
+
 // NewServer returns a new instance of server that would implements all methods to satisfy grpc interface
 func NewServer(debug bool) *server {
 	return &server{

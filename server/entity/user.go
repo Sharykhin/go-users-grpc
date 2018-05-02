@@ -19,4 +19,5 @@ type User struct {
 
 type UserService interface {
 	CreateUser(ctx context.Context, in *pb.CreateUserRequest) (*User, error)
+	Remove(ctx context.Context, ID string) error
 }

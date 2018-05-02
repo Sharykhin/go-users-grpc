@@ -43,7 +43,7 @@ func (s userService) CreateUser(ctx context.Context, in *pb.CreateUserRequest) (
 }
 
 func (s userService) Remove(ctx context.Context, ID string) error {
-	return s.db.C(s.collection).RemoveId(ID)
+	return s.db.C(s.collection).RemoveId(bson.ObjectIdHex(ID))
 }
 
 func init() {

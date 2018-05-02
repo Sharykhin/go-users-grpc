@@ -13,6 +13,13 @@ message CreateUserRequest {
     bool activated = 3;
 }
 
+message UpdateUserRequest {
+   oneof name {
+       bool name_null = 1;
+       string name_value = 2;
+   }
+}
+
 message UserResponse {
     string ID = 1;
     string name = 2;

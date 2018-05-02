@@ -5,7 +5,7 @@
   branch = "master"
   name = "github.com/Sharykhin/go-users-grpc"
   packages = ["proto"]
-  revision = "65dae735e598e1ee4218767f441ddf505b922f8a"
+  revision = "e9ef73498a30cee3ce50c042cc0d78e528ec4544"
 
 [[projects]]
   name = "github.com/golang/protobuf"
@@ -16,8 +16,8 @@
     "ptypes/duration",
     "ptypes/timestamp"
   ]
-  revision = "925541529c1fa6821df4e44ce2723319eb2be768"
-  version = "v1.0.0"
+  revision = "b4deda0973fb4c70b50d226b1af49f3da59f5265"
+  version = "v1.1.0"
 
 [[projects]]
   branch = "master"
