@@ -17,7 +17,7 @@ type server struct {
 	debug   bool
 }
 
-func (s server) CreateUser(ctx context.Context, in *pb.CreateUserRequest) (*pb.UserResponse, error) {
+func (s server) Create(ctx context.Context, in *pb.CreateUserRequest) (*pb.UserResponse, error) {
 	fmt.Printf("GRPC CreateUser is called with: %v\n", in)
 	u, err := s.storage.CreateUser(ctx, in)
 	if err != nil {
@@ -43,7 +43,7 @@ func (s server) Update(ctx context.Context, in *pb.UpdateUserRequest) (*pb.Empty
 	return &pb.Empty{}, nil
 }
 
-func (s server) Users(ctx context.Context, in *pb.UserFilter) (*pb.UserListReponse, error) {
+func (s server) List(ctx context.Context, in *pb.UserFilter) (*pb.UserListReponse, error) {
 	fmt.Printf("GRPC Users is called with: %v\n", in)
 	users, err := s.storage.Index(ctx, in.Limit, in.Offset)
 	if err != nil {

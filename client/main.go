@@ -26,7 +26,7 @@ func main() {
 
 	switch *action {
 	case "create":
-		response, err := c.CreateUser(context.Background(), &pb.CreateUserRequest{
+		response, err := c.Create(context.Background(), &pb.CreateUserRequest{
 			Name:      "John",
 			Email:     "chapal@inbox.ru",
 			Activated: false,
@@ -51,7 +51,7 @@ func main() {
 		}
 		log.Printf("Response from server: %v", response)
 	case "list":
-		response, err := c.Users(context.Background(), &pb.UserFilter{
+		response, err := c.List(context.Background(), &pb.UserFilter{
 			Limit:  3,
 			Offset: 1,
 		})

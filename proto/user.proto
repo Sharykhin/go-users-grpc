@@ -2,8 +2,8 @@ syntax = "proto3";
 package user;
 
 service User {
-    rpc CreateUser(CreateUserRequest) returns (UserResponse) {}
-    rpc Users(UserFilter) returns (UserListReponse) {}
+    rpc List(UserFilter) returns (UserListReponse) {}
+    rpc Create(CreateUserRequest) returns (UserResponse) {}
     rpc Update(UpdateUserRequest) returns(Empty) {}
     rpc Remove(UserID) returns (Empty) {}
 }
