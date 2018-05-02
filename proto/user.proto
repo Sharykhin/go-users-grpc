@@ -15,10 +15,11 @@ message CreateUserRequest {
 }
 
 message UpdateUserRequest {
-   oneof name {
-       bool name_null = 1;
-       string name_value = 2;
-   }
+    string ID = 1;
+    oneof name {
+        bool name_null = 2;
+        string name_value = 3;
+    }
 }
 
 message UserResponse {

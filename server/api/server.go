@@ -33,6 +33,16 @@ func (s server) CreateUser(ctx context.Context, in *pb.CreateUserRequest) (*pb.U
 	}, nil
 }
 
+func (s server) Update(ctx context.Context, in *pb.UpdateUserRequest) (*pb.Empty, error) {
+	fmt.Printf("GRPC Update is called with: %v\n", in)
+	err := s.storage.Update(ctx, in.ID, in)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "could not update user: %v", err)
+	}
+
+	return &pb.Empty{}, nil
+}
+
 func (s server) Users(context.Context, *pb.UserFilter) (*pb.UserListReponse, error) {
 	return &pb.UserListReponse{
 		Users: []*pb.UserResponse{},
