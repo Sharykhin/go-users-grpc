@@ -43,7 +43,17 @@ func main() {
 		log.Printf("Response from server: %v", response)
 	case "update":
 		response, err := c.Update(context.Background(), &pb.UpdateUserRequest{
-			Name: &pb.UpdateUserRequest_NameValue{NameValue: "John"},
+			ID:   *id,
+			Name: &pb.UpdateUserRequest_NameValue{NameValue: "Carl"},
+		})
+		if err != nil {
+			log.Fatalf("Error when calling Update: %v", err)
+		}
+		log.Printf("Response from server: %v", response)
+	case "list":
+		response, err := c.Users(context.Background(), &pb.UserFilter{
+			Limit:  3,
+			Offset: 1,
 		})
 		if err != nil {
 			log.Fatalf("Error when calling Update: %v", err)

@@ -18,7 +18,8 @@ type User struct {
 }
 
 type UserService interface {
+	Index(ctx context.Context, limit, offset int64) ([]User, error)
 	CreateUser(ctx context.Context, in *pb.CreateUserRequest) (*User, error)
-	Update(ctx context.Context, in *pb.UpdateUserRequest) error
+	Update(ctx context.Context, ID string, in *pb.UpdateUserRequest) error
 	Remove(ctx context.Context, ID string) error
 }
