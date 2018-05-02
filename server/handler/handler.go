@@ -14,12 +14,13 @@ import (
 
 func ListenAndServe() error {
 	address := os.Getenv("GRPC_ADDRESS")
+	env := os.Getenv("APP_ENV")
 	lis, err := net.Listen("tcp", address)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
 	// create a server instance
-	s := api.NewServer(true)
+	s := api.NewServer(env == "dev")
 	// create a gRPC server object
 	grpcServer := grpc.NewServer()
 	// attach the service to the grpc one

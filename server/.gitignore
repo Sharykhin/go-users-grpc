@@ -2,3 +2,5 @@ vendor
 .docker-runtime/*
 !.docker-runtime/.gitkeep
 .env
+logs/*
+!logs/.gitkeep
