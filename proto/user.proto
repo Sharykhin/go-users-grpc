@@ -28,6 +28,7 @@ message UserResponse {
     string email = 3;
     bool activated = 4;
     string created_at = 5;
+    string deleted_at = 6;
 }
 
 message UserListReponse {

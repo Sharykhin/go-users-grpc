@@ -24,7 +24,7 @@ type userService struct {
 // for managing users through mongodb database
 var UserService userService
 
-func (s userService) Index(ctx context.Context, limit, offset int64) ([]entity.User, error) {
+func (s userService) List(ctx context.Context, limit, offset int64) ([]entity.User, error) {
 	var users []entity.User
 	err := s.db.C(s.collection).Find(bson.M{}).Skip(int(offset)).Limit(int(limit)).All(&users)
 	if err != nil {
@@ -34,7 +34,7 @@ func (s userService) Index(ctx context.Context, limit, offset int64) ([]entity.U
 	return users, nil
 }
 
-func (s userService) CreateUser(ctx context.Context, in *pb.CreateUserRequest) (*entity.User, error) {
+func (s userService) Create(ctx context.Context, in *pb.CreateUserRequest) (*entity.User, error) {
 	user := entity.User{
 		ID:        bson.NewObjectId(),
 		Name:      in.Name,

@@ -15,11 +15,12 @@ type User struct {
 	Email     string        `bson:"email"`
 	Activated bool          `bson:"activated"`
 	CreatedAt time.Time     `bson:"created_at"`
+	DeletedAt time.Time     `bson:"created_at"`
 }
 
 type UserService interface {
-	Index(ctx context.Context, limit, offset int64) ([]User, error)
-	CreateUser(ctx context.Context, in *pb.CreateUserRequest) (*User, error)
+	List(ctx context.Context, limit, offset int64) ([]User, error)
+	Create(ctx context.Context, in *pb.CreateUserRequest) (*User, error)
 	Update(ctx context.Context, ID string, in *pb.UpdateUserRequest) error
 	Remove(ctx context.Context, ID string) error
 }
