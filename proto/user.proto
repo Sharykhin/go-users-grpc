@@ -4,6 +4,7 @@ package user;
 service User {
     rpc CreateUser(CreateUserRequest) returns (UserResponse) {}
     rpc Users(UserFilter) returns (UserListReponse) {}
+    rpc Update(UpdateUserRequest) returns(Empty) {}
     rpc Remove(UserID) returns (Empty) {}
 }
 
