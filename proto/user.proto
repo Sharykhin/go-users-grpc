@@ -4,6 +4,7 @@ package user;
 service User {
     rpc CreateUser(CreateUserRequest) returns (UserResponse) {}
     rpc Users(UserFilter) returns (UserListReponse) {}
+    rpc Remove(UserID) returns (Empty) {}
 }
 
 message CreateUserRequest {
@@ -22,6 +23,14 @@ message UserResponse {
 
 message UserListReponse {
     repeated UserResponse users = 1;
+}
+
+message UserID {
+    string ID = 1;
+}
+
+message Empty {
+
 }
 
 message UserFilter {

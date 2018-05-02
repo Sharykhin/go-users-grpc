@@ -42,6 +42,10 @@ func (s userService) CreateUser(ctx context.Context, in *pb.CreateUserRequest) (
 	return &user, nil
 }
 
+func (s userService) Remove(ctx context.Context, ID string) error {
+	return s.db.C(s.collection).RemoveId(ID)
+}
+
 func init() {
 	address := os.Getenv("MONGODB_ADDRESS")
 	var err error
