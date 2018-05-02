@@ -16,11 +16,12 @@ func main() {
 	defer conn.Close()
 	c := pb.NewUserClient(conn)
 	response, err := c.CreateUser(context.Background(), &pb.CreateUserRequest{
-		Name:  "John",
-		Email: "chapal@inbox.ru",
+		Name:      "John",
+		Email:     "chapal@inbox.ru",
+		Activated: false,
 	})
 	if err != nil {
 		log.Fatalf("Error when calling CreateUser: %v", err)
 	}
-	log.Printf("Response from server: %s", response)
+	log.Printf("Response from server: %v", response)
 }

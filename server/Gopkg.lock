@@ -5,7 +5,7 @@
   branch = "master"
   name = "github.com/Sharykhin/go-users-grpc"
   packages = ["proto"]
-  revision = "1c358dd6b5ce4d885208d05a2fd9562a7353c288"
+  revision = "65dae735e598e1ee4218767f441ddf505b922f8a"
 
 [[projects]]
   name = "github.com/golang/protobuf"
@@ -59,7 +59,7 @@
   branch = "master"
   name = "google.golang.org/genproto"
   packages = ["googleapis/rpc/status"]
-  revision = "7fd901a49ba6a7f87732eb344f6e3c5b19d1b200"
+  revision = "86e600f69ee4704c6efbf6a2a40a5c10700e76c2"
 
 [[projects]]
   name = "google.golang.org/grpc"

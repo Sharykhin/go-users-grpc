@@ -25,9 +25,11 @@ func (s server) CreateUser(ctx context.Context, in *pb.CreateUserRequest) (*pb.U
 	}
 
 	return &pb.UserResponse{
-		ID:    u.ID.Hex(),
-		Name:  u.Name,
-		Email: u.Email,
+		ID:        u.ID.Hex(),
+		Name:      u.Name,
+		Email:     u.Email,
+		Activated: u.Activated,
+		CreatedAt: u.CreatedAt.Format("2006-01-02 15:04:05"),
 	}, nil
 }
 

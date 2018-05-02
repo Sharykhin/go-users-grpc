@@ -29,9 +29,10 @@ func (s userService) CreateUser(ctx context.Context, in *pb.CreateUserRequest) (
 		ID:        bson.NewObjectId(),
 		Name:      in.Name,
 		Email:     in.Email,
+		Activated: in.Activated,
 		CreatedAt: time.Now().UTC(),
-		Activated: false,
 	}
+	fmt.Printf("Mongodb store entity: %v\n", user)
 	err := s.db.C(s.collection).Insert(user)
 
 	if err != nil {
