@@ -37,6 +37,22 @@ func (s userServer) List(ctx context.Context, in *pb.UserFilter) (*pb.UserListRe
 	return response, nil
 }
 
+func (s userServer) Count(ctx context.Context, in *pb.CountCriteria) (*pb.CountResponse, error) {
+	if s.debug {
+		log.Printf("GRPC: Method <Count> is called with: %v\n", in)
+	}
+
+	c, err := s.storage.Count(ctx, in)
+	if err != nil {
+		file.Logger.Errorf("could not make count: %v", err)
+		return nil, status.Errorf(codes.Internal, "could not make count: %v", err)
+	}
+
+	return &pb.CountResponse{
+		Count: c,
+	}, nil
+}
+
 func (s userServer) Create(ctx context.Context, in *pb.CreateUserRequest) (*pb.UserResponse, error) {
 	if s.debug {
 		log.Printf("GRPC: Method <Create> is called with: %v\n", in)

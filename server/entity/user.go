@@ -31,6 +31,7 @@ type (
 	// UserService is a general interface of User entity
 	UserService interface {
 		List(ctx context.Context, in *pb.UserFilter) ([]User, error)
+		Count(ctx context.Context, in *pb.CountCriteria) (int64, error)
 		Create(ctx context.Context, in *pb.CreateUserRequest) (*User, error)
 		Update(ctx context.Context, ID string, in *pb.UpdateUserRequest) error
 		Remove(ctx context.Context, ID string) error

@@ -57,7 +57,7 @@ func main() {
 			Limit:  3,
 			Offset: 0,
 		}
-		fmt.Println(*deleted)
+
 		if *deleted == "true" {
 			filter.Criteria = []*pb.QueryCriteria{
 				{
@@ -77,6 +77,28 @@ func main() {
 		response, err := c.List(context.Background(), filter)
 		if err != nil {
 			log.Fatalf("Error when calling Update: %v", err)
+		}
+		log.Printf("Response from server: %v", response)
+	case "count":
+		filter := pb.CountCriteria{}
+		if *deleted == "true" {
+			filter.Criteria = []*pb.QueryCriteria{
+				{
+					Key:   "deleted_at",
+					Value: "true",
+				},
+			}
+		} else if *deleted == "false" {
+			filter.Criteria = []*pb.QueryCriteria{
+				{
+					Key:   "deleted_at",
+					Value: "false",
+				},
+			}
+		}
+		response, err := c.Count(context.Background(), &filter)
+		if err != nil {
+			log.Fatalf("Error when calling Count: %v", err)
 		}
 		log.Printf("Response from server: %v", response)
 	default:

@@ -76,6 +76,21 @@ func (s userService) List(ctx context.Context, in *pb.UserFilter) ([]entity.User
 	return users, nil
 }
 
+func (s userService) Count(ctx context.Context, in *pb.CountCriteria) (int64, error) {
+	criteria, err := applyCriteria(in.Criteria)
+	if err != nil {
+		return 0, err
+	}
+
+	c, err := s.db.C(s.collection).Find(criteria).Count()
+	if err != nil {
+		log.Printf("MongoDB: got error on count call: %v\n", err)
+		return 0, err
+	}
+
+	return int64(c), nil
+}
+
 func (s userService) Create(ctx context.Context, in *pb.CreateUserRequest) (*entity.User, error) {
 
 	user := entity.User{

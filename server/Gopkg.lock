@@ -5,7 +5,7 @@
   branch = "master"
   name = "github.com/Sharykhin/go-users-grpc"
   packages = ["proto"]
-  revision = "0661f8fb81407414ed84b81acc09cecfd8baefed"
+  revision = "2a681918bd187b3735ac7eeac698927cf3a333dc"
 
 [[projects]]
   name = "github.com/golang/protobuf"
@@ -32,7 +32,7 @@
     "lex/httplex",
     "trace"
   ]
-  revision = "5f9ae10d9af5b1c89ae6904293b14b064d4ada23"
+  revision = "640f4622ab692b87c2f3a94265e6f579fe38263d"
 
 [[projects]]
   name = "golang.org/x/text"
