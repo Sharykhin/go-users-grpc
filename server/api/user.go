@@ -3,8 +3,6 @@ package api
 import (
 	"context"
 
-	"log"
-
 	pb "github.com/Sharykhin/go-users-grpc/proto"
 	"github.com/Sharykhin/go-users-grpc/server/entity"
 	"github.com/Sharykhin/go-users-grpc/server/logger/file"
@@ -20,9 +18,6 @@ type userServer struct {
 }
 
 func (s userServer) List(ctx context.Context, in *pb.UserFilter) (*pb.UserListReponse, error) {
-	if s.debug {
-		log.Printf("GRPC: Method <List> is called with: %v\n", in)
-	}
 
 	users, err := s.storage.List(ctx, in)
 	if err != nil {
@@ -38,9 +33,6 @@ func (s userServer) List(ctx context.Context, in *pb.UserFilter) (*pb.UserListRe
 }
 
 func (s userServer) Count(ctx context.Context, in *pb.CountCriteria) (*pb.CountResponse, error) {
-	if s.debug {
-		log.Printf("GRPC: Method <Count> is called with: %v\n", in)
-	}
 
 	c, err := s.storage.Count(ctx, in)
 	if err != nil {
@@ -54,9 +46,7 @@ func (s userServer) Count(ctx context.Context, in *pb.CountCriteria) (*pb.CountR
 }
 
 func (s userServer) Create(ctx context.Context, in *pb.CreateUserRequest) (*pb.UserResponse, error) {
-	if s.debug {
-		log.Printf("GRPC: Method <Create> is called with: %v\n", in)
-	}
+
 	if err := validate.UserCreateRequest(in); err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "failed validation: %v", err)
 	}
@@ -70,9 +60,6 @@ func (s userServer) Create(ctx context.Context, in *pb.CreateUserRequest) (*pb.U
 }
 
 func (s userServer) Update(ctx context.Context, in *pb.UpdateUserRequest) (*pb.Empty, error) {
-	if s.debug {
-		log.Printf("GRPC: Method <Update> is called with: %v\n", in)
-	}
 
 	if err := validate.UserUpdateRequest(in); err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "failed validation: %v", err)
@@ -88,9 +75,7 @@ func (s userServer) Update(ctx context.Context, in *pb.UpdateUserRequest) (*pb.E
 }
 
 func (s userServer) Remove(ctx context.Context, in *pb.UserID) (*pb.Empty, error) {
-	if s.debug {
-		log.Printf("GRPC: Method <Remove> is called with: %v\n", in)
-	}
+
 	err := s.storage.Remove(ctx, in.ID)
 	if err != nil {
 		file.Logger.Errorf("could not remove user: %v", err)
