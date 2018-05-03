@@ -3,6 +3,7 @@ package user;
 
 service User {
     rpc List(UserFilter) returns (UserListReponse) {}
+    rpc Count(CountCriteria) returns (CountResponse) {}
     rpc Create(CreateUserRequest) returns (UserResponse) {}
     rpc Update(UpdateUserRequest) returns(Empty) {}
     rpc Remove(UserID) returns (Empty) {}
@@ -43,9 +44,17 @@ message Empty {
 
 }
 
+message CountResponse {
+    int64 count = 1;
+}
+
 message QueryCriteria {
     string key = 1;
     string value = 2;
+}
+
+message CountCriteria {
+    repeated QueryCriteria criteria = 1;
 }
 
 message UserFilter {
