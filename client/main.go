@@ -44,9 +44,10 @@ func main() {
 		log.Printf("Response from server: %v", response)
 	case "update":
 		response, err := c.Update(context.Background(), &pb.UpdateUserRequest{
-			ID:    *id,
-			Name:  &pb.UpdateUserRequest_NameValue{NameValue: "Carl"},
-			Email: &pb.UpdateUserRequest_EmailNull{EmailNull: true},
+			ID:        *id,
+			Name:      &pb.UpdateUserRequest_NameValue{NameValue: "Bob"},
+			Email:     &pb.UpdateUserRequest_EmailValue{EmailValue: "bob@bob.com"},
+			Activated: &pb.UpdateUserRequest_ActivatedValue{ActivatedValue: true},
 		})
 		if err != nil {
 			log.Fatalf("Error when calling Update: %v", err)

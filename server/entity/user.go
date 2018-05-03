@@ -4,6 +4,10 @@ import (
 	"context"
 	"time"
 
+	"fmt"
+	"regexp"
+	"strings"
+
 	pb "github.com/Sharykhin/go-users-grpc/proto"
 	"gopkg.in/mgo.v2/bson"
 )
@@ -23,6 +27,10 @@ type (
 		CreatedAt time.Time     `bson:"created_at"`
 		DeletedAt NullTime      `bson:"deleted_at"`
 	}
+	UserUpdate struct {
+		*pb.UpdateUserRequest
+		Validated map[string]interface{}
+	}
 	// NullTime implements setter and getter for bson to provide nullable value
 	NullTime struct {
 		Time time.Time
@@ -33,7 +41,7 @@ type (
 		List(ctx context.Context, in *pb.UserFilter) ([]User, error)
 		Count(ctx context.Context, in *pb.CountCriteria) (int64, error)
 		Create(ctx context.Context, in *pb.CreateUserRequest) (*User, error)
-		Update(ctx context.Context, ID string, in *pb.UpdateUserRequest) error
+		Update(ctx context.Context, ID string, in map[string]interface{}) error
 		Remove(ctx context.Context, ID string) error
 	}
 )
@@ -63,4 +71,64 @@ func (t NullTime) String() string {
 		return ""
 	}
 	return t.Time.UTC().Format(TimeFormat)
+}
+
+const (
+	nameMinLength  = 2
+	nameMaxLength  = 10
+	emailMaxLength = 80
+)
+
+var re = regexp.MustCompile(`^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,4}$`)
+
+func (u UserUpdate) Validate() error {
+	if u.GetNameNull() == false {
+		if err := validateName(u.GetNameValue()); err != nil {
+			return err
+		}
+		u.Validated["name"] = u.GetNameValue()
+	}
+
+	if u.GetEmailNull() == false {
+		if err := validateEmail(u.GetEmailValue()); err != nil {
+			return err
+		}
+		u.Validated["email"] = u.GetEmailValue()
+	}
+
+	if u.GetActivatedNull() == false {
+		u.Validated["activated"] = u.GetActivatedValue()
+	}
+	return nil
+}
+
+func validateName(name string) error {
+	trimmedName := strings.Trim(name, " ")
+	l := len([]rune(trimmedName))
+	if l < nameMinLength {
+		return fmt.Errorf("name could not be less than %d characters", nameMinLength)
+	}
+
+	if l > nameMaxLength {
+		return fmt.Errorf("name could not be more than %d characters", nameMaxLength)
+	}
+
+	return nil
+}
+
+func validateEmail(email string) error {
+	trimmedEmail := strings.Trim(email, " ")
+	if trimmedEmail == "" {
+		return fmt.Errorf("email is required")
+	}
+
+	if len([]rune(trimmedEmail)) > emailMaxLength {
+		return fmt.Errorf("email can not contain more than %d characters", emailMaxLength)
+	}
+
+	if !re.MatchString(trimmedEmail) {
+		return fmt.Errorf("enter a valid email address")
+	}
+
+	return nil
 }

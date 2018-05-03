@@ -113,8 +113,16 @@ func (s userService) Create(ctx context.Context, in *pb.CreateUserRequest) (*ent
 	return &user, nil
 }
 
-func (s userService) Update(ctx context.Context, ID string, in *pb.UpdateUserRequest) error {
-	return s.db.C(s.collection).Update(bson.M{"_id": bson.ObjectIdHex(ID)}, bson.M{"$set": bson.M{"name": in.GetNameValue()}})
+func (s userService) Update(ctx context.Context, ID string, in map[string]interface{}) error {
+	//updates := bson.M{}
+	//if in.GetNameNull() == false {
+	//	updates["name"] = in.GetNameValue()
+	//}
+	//
+	//if in.GetEmailNull() == false {
+	//	updates["email"] = in.GetEmailValue()
+	//}
+	return s.db.C(s.collection).Update(bson.M{"_id": bson.ObjectIdHex(ID)}, bson.M{"$set": in})
 }
 
 func (s userService) Remove(ctx context.Context, ID string) error {
