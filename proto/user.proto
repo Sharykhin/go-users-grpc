@@ -21,6 +21,14 @@ message UpdateUserRequest {
         bool name_null = 2;
         string name_value = 3;
     }
+    oneof email {
+        bool email_null = 4;
+        string email_value  =5;
+    }
+    oneof activated {
+        bool activated_null = 6;
+        bool activated_value = 7;
+    }
 }
 
 message UserResponse {
