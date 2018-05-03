@@ -5,7 +5,7 @@
   branch = "master"
   name = "github.com/Sharykhin/go-users-grpc"
   packages = ["proto"]
-  revision = "2a681918bd187b3735ac7eeac698927cf3a333dc"
+  revision = "311ced512d3202a90cbfce9ffff6eae07213c62e"
 
 [[projects]]
   name = "github.com/golang/protobuf"

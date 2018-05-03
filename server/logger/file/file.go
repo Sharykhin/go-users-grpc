@@ -21,7 +21,7 @@ func init() {
 		log.Fatalf("error opening file: %v", err)
 	}
 
-	Logger = logger{Log: log.New(io.MultiWriter(f, os.Stdout), "", log.LstdFlags|log.Lshortfile)}
+	Logger = logger{Log: log.New(io.MultiWriter(f, os.Stderr), "", log.LstdFlags|log.Lshortfile)}
 
 }
 

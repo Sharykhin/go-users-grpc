@@ -44,8 +44,9 @@ func main() {
 		log.Printf("Response from server: %v", response)
 	case "update":
 		response, err := c.Update(context.Background(), &pb.UpdateUserRequest{
-			ID:   *id,
-			Name: &pb.UpdateUserRequest_NameValue{NameValue: "Carl"},
+			ID:    *id,
+			Name:  &pb.UpdateUserRequest_NameValue{NameValue: "Carl"},
+			Email: &pb.UpdateUserRequest_EmailNull{EmailNull: true},
 		})
 		if err != nil {
 			log.Fatalf("Error when calling Update: %v", err)
@@ -104,5 +105,4 @@ func main() {
 	default:
 		fmt.Println("specify an action")
 	}
-
 }

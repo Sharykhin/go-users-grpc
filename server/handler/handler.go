@@ -8,6 +8,7 @@ import (
 
 	pb "github.com/Sharykhin/go-users-grpc/proto"
 	"github.com/Sharykhin/go-users-grpc/server/api"
+	"github.com/Sharykhin/go-users-grpc/server/middleware"
 	"google.golang.org/grpc"
 )
 
@@ -20,8 +21,12 @@ func ListenAndServe() error {
 	}
 	// create a server instance
 	us := api.NewUserServer(env == "dev")
+
 	// create a gRPC server object
-	grpcServer := grpc.NewServer()
+	grpcServer := grpc.NewServer(
+		grpc.UnaryInterceptor(middleware.ChainUnaryServer(middleware.UnaryLogHandler, middleware.UnaryPanicHandler)),
+		grpc.StreamInterceptor(middleware.ChainStreamServer()),
+	)
 	// attach the service to the grpc one
 	pb.RegisterUserServer(grpcServer, us)
 	// start the server
