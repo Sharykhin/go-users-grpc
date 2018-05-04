@@ -61,18 +61,11 @@ func (s userServer) Create(ctx context.Context, in *pb.CreateUserRequest) (*pb.U
 
 func (s userServer) Update(ctx context.Context, in *pb.UpdateUserRequest) (*pb.Empty, error) {
 
-	uu := entity.UserUpdate{
-		UpdateUserRequest: in,
-		Validated:         make(map[string]interface{}),
-	}
-	if err := uu.Validate(); err != nil {
+	if err := validate.UserUpdateRequest(in); err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "failed validation: %v", err)
 	}
-	//if err := validate.UserUpdateRequest(in); err != nil {
-	//	return nil, status.Errorf(codes.InvalidArgument, "failed validation: %v", err)
-	//}
 
-	err := s.storage.Update(ctx, in.ID, uu.Validated)
+	err := s.storage.Update(ctx, in.ID, in)
 	if err != nil {
 		file.Logger.Errorf("could not update user: %v", err)
 		return nil, status.Errorf(codes.Internal, "could not update user: %v", err)
