@@ -13,7 +13,7 @@ import (
 const (
 	nameMinLength  = 2
 	nameMaxLength  = 10
-	emailMaxLength = 80
+	emailMaxLength = 20
 )
 
 var re = regexp.MustCompile(`^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,4}$`)
@@ -48,6 +48,11 @@ func UserUpdateRequest(in *pb.UpdateUserRequest) error {
 
 func validateName(name string) error {
 	trimmedName := strings.Trim(name, " ")
+
+	if trimmedName == "" {
+		return fmt.Errorf("name is required")
+	}
+
 	l := len([]rune(trimmedName))
 	if l < nameMinLength {
 		return fmt.Errorf("name could not be less than %d characters", nameMinLength)
